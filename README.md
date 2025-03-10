@@ -163,7 +163,7 @@ You can ensure that each dialog gets a new ViewModel instance by using `ViewMode
 ```kotlin
 ViewModelStoreScope(key = item) {
   if (visibleDialog) {
-    val vm: DialogViewModel = hiltViewModel() // this will be scoped to the ViewModelStoreProvider
+    val vm: DialogViewModel = hiltViewModel() // this will be scoped to the ViewModelStoreScope
     val text by vm.state.collectAsState()
 
     Dialog(onDismissRequest = { visibleDialog = false }) {
