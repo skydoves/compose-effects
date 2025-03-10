@@ -71,7 +71,7 @@ kotlin {
         implementation(compose.runtime)
         implementation(compose.foundation)
         implementation(compose.ui)
-        implementation(libs.lifecycle.viewmodel.compose)
+        api(libs.lifecycle.viewmodel.compose)
       }
     }
   }
