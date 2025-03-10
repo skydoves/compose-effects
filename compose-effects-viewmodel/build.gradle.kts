@@ -44,8 +44,6 @@ kotlin {
     iosX64(),
     iosArm64(),
     iosSimulatorArm64(),
-    macosArm64(),
-    macosX64(),
   ).forEach {
     it.binaries.framework {
       baseName = "common"
@@ -71,7 +69,7 @@ kotlin {
         implementation(compose.runtime)
         implementation(compose.foundation)
         implementation(compose.ui)
-        api(libs.lifecycle.viewmodel.compose)
+        implementation(libs.lifecycle.viewmodel.compose)
       }
     }
   }
