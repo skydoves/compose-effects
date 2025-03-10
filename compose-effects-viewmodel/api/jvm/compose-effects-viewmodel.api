@@ -1,0 +1,4 @@
+public final class com/skydoves/compose/effects/viewmodel/ViewModelStoreScopeKt {
+	public static final fun ViewModelStoreScope (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+}
+
