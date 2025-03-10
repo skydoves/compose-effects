@@ -161,7 +161,7 @@ LazyColumn(modifier = Modifier.fillMaxSize()) {
 You can ensure that each dialog gets a new ViewModel instance by using `ViewModelStoreScope`, as demonstrated in the following code snippet:
 
 ```kotlin
-ViewModelStoreProvider(key = item) {
+ViewModelStoreScope(key = item) {
   if (visibleDialog) {
     val vm: DialogViewModel = hiltViewModel() // this will be scoped to the ViewModelStoreProvider
     val text by vm.state.collectAsState()
