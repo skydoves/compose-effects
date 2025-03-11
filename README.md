@@ -85,7 +85,7 @@ Unlike `LaunchedEffect`, `RememberedEffect` does not create or launch a new coro
 var count by remember { mutableIntStateOf(0) }
 
 // Unlike LaunchedEffect, this won't launch a new coroutine scope when the key changes.
-RememberEffect(key1 = count) {
+RememberedEffect(key1 = count) {
     Log.d(tag, "$count")
 }
 
