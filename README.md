@@ -77,9 +77,9 @@ sourceSets {
 
 ### RememberedEffect
 
-`RememberEffect` is a side-effect API that executes the provided lambda function when it enters the composition and re-executes it whenever key changes.
+`RememberedEffect` is a side-effect API that executes the provided lambda function when it enters the composition and re-executes it whenever key changes.
 
-Unlike `LaunchedEffect`, `RememberEffect` does not create or launch a new coroutine scope on each key change, making it a more efficient option for remembering the execution of side-effects, if you don't to launch a coroutine task.
+Unlike `LaunchedEffect`, `RememberedEffect` does not create or launch a new coroutine scope on each key change, making it a more efficient option for remembering the execution of side-effects, if you don't to launch a coroutine task.
 
 ```kotlin
 var count by remember { mutableIntStateOf(0) }
