@@ -89,7 +89,7 @@ public fun RememberedEffect(
   vararg keys: Any?,
   effect: () -> Unit,
 ) {
-  remember(keys) { RememberedEffectImpl(effect = effect) }
+  remember(*keys) { RememberedEffectImpl(effect = effect) }
 }
 
 /**
