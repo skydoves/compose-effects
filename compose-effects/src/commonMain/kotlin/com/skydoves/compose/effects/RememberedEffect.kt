@@ -21,6 +21,19 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.remember
 
+private const val RememberedEffectNoParamError =
+  "RememberedEffect must provide one or more 'key' parameters."
+
+/**
+ * It is an error to call [RememberedEffect] without at least one `key` parameter.
+ */
+// This deprecated-error function shadows the varargs overload so that the varargs version
+// is not used without key parameters.
+@Deprecated(RememberedEffectNoParamError, level = DeprecationLevel.ERROR)
+@Suppress("DeprecatedCallableAddReplaceWith", "UNUSED_PARAMETER")
+@Composable
+public fun RememberedEffect(effect: () -> Unit): Unit = error(RememberedEffectNoParamError)
+
 /**
  * `RememberEffect` is a side-effect API that executes the provided [effect] lambda when it enters
  * the composition and re-executes it whenever [key1] changes.
