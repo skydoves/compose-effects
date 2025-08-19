@@ -51,7 +51,11 @@ kotlin {
     browser()
     nodejs()
   }
-  wasmJs { browser() }
+  wasmJs {
+    browser()
+    binaries.library()
+    binaries.executable()
+  }
 
   @Suppress("OPT_IN_USAGE")
   applyHierarchyTemplate {
@@ -75,6 +79,7 @@ kotlin {
             }
           }
           withJs()
+          withWasmJs()
         }
       }
     }
