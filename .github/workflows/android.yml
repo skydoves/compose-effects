@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew apiCheck
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4.1.7
       - name: set up JDK
