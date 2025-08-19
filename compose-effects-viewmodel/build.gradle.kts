@@ -47,6 +47,15 @@ kotlin {
   iosSimulatorArm64()
   macosX64()
   macosArm64()
+  js(IR) {
+    browser()
+    nodejs()
+  }
+  wasmJs {
+    browser()
+    binaries.library()
+    binaries.executable()
+  }
 
   @Suppress("OPT_IN_USAGE")
   applyHierarchyTemplate {
