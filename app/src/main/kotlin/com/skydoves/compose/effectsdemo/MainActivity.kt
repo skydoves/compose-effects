@@ -19,13 +19,16 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.skydoves.compose.effects.RememberedEffect
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +43,10 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(context, "Count: $count", Toast.LENGTH_SHORT).show()
       }
 
-      Button(onClick = { count++ }) {
+      Button(
+        modifier = Modifier.padding(20.dp),
+        onClick = { count++ },
+      ) {
         Text("Count: $count")
       }
     }
