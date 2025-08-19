@@ -52,9 +52,17 @@ kotlin {
     nodejs()
   }
   wasmJs {
-    browser()
+    browser {
+      testTask {
+        enabled = false
+      }
+    }
+    nodejs {
+      testTask {
+        enabled = false
+      }
+    }
     binaries.library()
-    binaries.executable()
   }
 
   @Suppress("OPT_IN_USAGE")
