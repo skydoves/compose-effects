@@ -58,3 +58,6 @@ google-services.json
 
 # Temporary API docs
 docs/api
+
+# Local planning/task notes
+tasks/
