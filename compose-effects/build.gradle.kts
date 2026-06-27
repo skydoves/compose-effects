@@ -42,10 +42,8 @@ mavenPublishing {
 kotlin {
   androidTarget { publishLibraryVariants("release") }
   jvm("desktop")
-  iosX64()
   iosArm64()
   iosSimulatorArm64()
-  macosX64()
   macosArm64()
   js(IR) {
     browser()
@@ -64,12 +62,10 @@ kotlin {
         group("darwin") {
           group("apple") {
             group("ios") {
-              withIosX64()
               withIosArm64()
               withIosSimulatorArm64()
             }
             group("macos") {
-              withMacosX64()
               withMacosArm64()
             }
           }

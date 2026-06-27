@@ -32,10 +32,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
  * @param content The content of the composable.
  */
 @Composable
-public fun ViewModelStoreScope(
-  key: Any,
-  content: @Composable () -> Unit,
-) {
+public fun ViewModelStoreScope(key: Any, content: @Composable () -> Unit) {
   // Restart composition on every new instance of the factory
   key(key) {
     /** scope view models to a local store and reset the store with the given [key] */

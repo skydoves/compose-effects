@@ -21,11 +21,13 @@ subprojects {
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
             target("**/*.kt")
-            targetExclude("$buildDir/**/*.kt")
+            targetExclude("${layout.buildDirectory.get().asFile}/**/*.kt")
             ktlint().editorConfigOverride(
                 mapOf(
                     "indent_size" to "2",
-                    "continuation_indent_size" to "2"
+                    "continuation_indent_size" to "2",
+                    // @Composable functions use PascalCase by convention (e.g. RememberedEffect).
+                    "ktlint_standard_function-naming" to "disabled"
                 )
             )
             licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
@@ -34,7 +36,7 @@ subprojects {
         }
         format("kts") {
             target("**/*.kts")
-            targetExclude("$buildDir/**/*.kts")
+            targetExclude("${layout.buildDirectory.get().asFile}/**/*.kts")
             licenseHeaderFile(rootProject.file("spotless/copyright.kt"), "(^(?![\\/ ]\\*).*$)")
             trimTrailingWhitespace()
             endWithNewline()

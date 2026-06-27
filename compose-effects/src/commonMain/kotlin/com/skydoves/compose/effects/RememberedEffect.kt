@@ -21,7 +21,7 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.remember
 
-private const val RememberedEffectNoParamError =
+private const val REMEMBERED_EFFECT_NO_PARAM_ERROR =
   "RememberedEffect must provide one or more 'key' parameters."
 
 /**
@@ -29,10 +29,10 @@ private const val RememberedEffectNoParamError =
  */
 // This deprecated-error function shadows the varargs overload so that the varargs version
 // is not used without key parameters.
-@Deprecated(RememberedEffectNoParamError, level = DeprecationLevel.ERROR)
+@Deprecated(REMEMBERED_EFFECT_NO_PARAM_ERROR, level = DeprecationLevel.ERROR)
 @Suppress("DeprecatedCallableAddReplaceWith", "UNUSED_PARAMETER")
 @Composable
-public fun RememberedEffect(effect: () -> Unit): Unit = error(RememberedEffectNoParamError)
+public fun RememberedEffect(effect: () -> Unit): Unit = error(REMEMBERED_EFFECT_NO_PARAM_ERROR)
 
 /**
  * `RememberEffect` is a side-effect API that executes the provided [effect] lambda when it enters
@@ -44,10 +44,7 @@ public fun RememberedEffect(effect: () -> Unit): Unit = error(RememberedEffectNo
  */
 @Composable
 @NonRestartableComposable
-public fun RememberedEffect(
-  key1: Any?,
-  effect: () -> Unit,
-) {
+public fun RememberedEffect(key1: Any?, effect: () -> Unit) {
   remember(key1) { RememberedEffectImpl(effect = effect) }
 }
 
@@ -61,11 +58,7 @@ public fun RememberedEffect(
  */
 @Composable
 @NonRestartableComposable
-public fun RememberedEffect(
-  key1: Any?,
-  key2: Any?,
-  effect: () -> Unit,
-) {
+public fun RememberedEffect(key1: Any?, key2: Any?, effect: () -> Unit) {
   remember(key1, key2) { RememberedEffectImpl(effect = effect) }
 }
 
@@ -79,12 +72,7 @@ public fun RememberedEffect(
  */
 @Composable
 @NonRestartableComposable
-public fun RememberedEffect(
-  key1: Any?,
-  key2: Any?,
-  key3: Any?,
-  effect: () -> Unit,
-) {
+public fun RememberedEffect(key1: Any?, key2: Any?, key3: Any?, effect: () -> Unit) {
   remember(key1, key2, key3) { RememberedEffectImpl(effect = effect) }
 }
 
@@ -98,19 +86,14 @@ public fun RememberedEffect(
  */
 @Composable
 @NonRestartableComposable
-public fun RememberedEffect(
-  vararg keys: Any?,
-  effect: () -> Unit,
-) {
+public fun RememberedEffect(vararg keys: Any?, effect: () -> Unit) {
   remember(*keys) { RememberedEffectImpl(effect = effect) }
 }
 
 /**
  * Launches the provided [effect] lambda when it enters the composition.
  */
-internal class RememberedEffectImpl(
-  private val effect: () -> Unit,
-) : RememberObserver {
+internal class RememberedEffectImpl(private val effect: () -> Unit) : RememberObserver {
 
   override fun onRemembered() {
     effect.invoke()
