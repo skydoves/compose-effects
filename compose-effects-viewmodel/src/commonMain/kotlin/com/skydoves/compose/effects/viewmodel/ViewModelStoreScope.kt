@@ -25,32 +25,34 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 /**
- * A disposable side-effect that creates a new [ViewModelStore] and [ViewModelStoreOwner],
- * scoping view models to a local store and ensuring the store is cleared when the it leaves the composition.
+ * A disposable side-effect that creates a new [ViewModelStore] and [ViewModelStoreOwner], scoping
+ * view models to a local store and clearing the store when this scope leaves the composition or the
+ * [key] changes.
  *
- * @param key The key used to identify the store. The scope of the store will be decided by this key .
+ * The scoped owner only provides a [ViewModelStore]. On Kotlin/Native (iOS, macOS) the reflective
+ * default factory is unavailable, so obtain view models with an explicit factory, for example
+ * `viewModel { MyViewModel() }`.
+ *
+ * @param key Identifies the store; the store is reset whenever this key changes.
  * @param content The content of the composable.
  */
 @Composable
 public fun ViewModelStoreScope(key: Any, content: @Composable () -> Unit) {
-  // Restart composition on every new instance of the factory
+  // Restart composition on every new key so the store is reset.
   key(key) {
-    /** scope view models to a local store and reset the store with the given [key] */
-    val viewModelStore = remember { ViewModelStore() }
-    val viewModelStoreOwner = remember(viewModelStore) {
+    val store = remember { ViewModelStore() }
+    val owner = remember(store) {
       object : ViewModelStoreOwner {
-        override val viewModelStore: ViewModelStore get() = viewModelStore
+        override val viewModelStore: ViewModelStore = store
       }
     }
 
-    // Ensure the store is cleared when the composable is disposed
+    // Ensure the store is cleared when this scope leaves the composition.
     DisposableEffect(Unit) {
-      onDispose {
-        viewModelStore.clear()
-      }
+      onDispose { store.clear() }
     }
 
-    CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
+    CompositionLocalProvider(LocalViewModelStoreOwner provides owner) {
       content.invoke()
     }
   }

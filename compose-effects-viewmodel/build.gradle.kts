@@ -59,6 +59,7 @@ kotlin {
       }
       group("skia") {
         withJvm()
+        withJs()
         group("darwin") {
           group("apple") {
             group("ios") {
@@ -69,7 +70,6 @@ kotlin {
               withMacosArm64()
             }
           }
-          withJs()
         }
       }
     }
@@ -79,8 +79,6 @@ kotlin {
     val commonMain by getting {
       dependencies {
         implementation(compose.runtime)
-        implementation(compose.foundation)
-        implementation(compose.ui)
         implementation(libs.lifecycle.viewmodel.compose)
       }
     }
