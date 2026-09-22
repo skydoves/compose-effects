@@ -94,6 +94,32 @@ Button(onClick = { count++ }) {
 }
 ```
 
+### Lint
+
+The `compose-effects` AAR ships an Android Lint check, so it activates on its own once you depend on the library. There is nothing to add to your build file.
+
+| | |
+|---|---|
+| Artifact | `com.github.skydoves:compose-effects-lint` (published inside `compose-effects`) |
+| Issue id | `LaunchedEffectWithoutSuspend` |
+| Severity | Warning |
+
+It flags a `LaunchedEffect` whose block never suspends and never touches its `CoroutineScope` receiver, and offers to rename the call to `RememberedEffect`, keeping the keys.
+
+**Read the suggestion before taking it.** A `RememberedEffect` block runs synchronously from `RememberObserver.onRemembered()`, on the thread that applies the composition, and it is not cancelled when the keys change. That fits short, non-blocking work. A block that sleeps, blocks on I/O or loops forever belongs in `LaunchedEffect`, and the check cannot tell those apart from a cheap one. The quick fix is deliberately not an auto-fix for that reason, and it is withheld entirely for call shapes a rename would break (a fully qualified callee, a `block = ` named argument, or a file that already imports a different `RememberedEffect`).
+
+The check stays quiet whenever it cannot resolve something in the block, so it under-reports rather than guessing. One case is worth knowing about: AGP 8.12 bundles a Kotlin 2.2 frontend for lint, which cannot read the metadata of a Kotlin 2.4 standard library, so calls to top-level stdlib functions such as `println`, `listOf` or `require` do not resolve and silence the check for that block. Member calls, Java statics and your own top-level functions are unaffected.
+
+To turn it off:
+
+```kotlin
+android {
+    lint {
+        disable += "LaunchedEffectWithoutSuspend"
+    }
+}
+```
+
 ## Compose Effects ViewModel
 
 Compose Effects ViewModel provides side-effects/CompositionLocal APIs related to ViewModel.
