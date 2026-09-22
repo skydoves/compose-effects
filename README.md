@@ -183,6 +183,12 @@ ViewModelStoreScope(key = item) {
 
 ViewModelStoreScope is a disposable side-effect that creates a new `ViewModelStore` and `ViewModelStoreOwner`, scoping view models to a local store and ensuring the store is cleared when the it leaves the composition. When you need to scope ViewModels to a specific Composable-based lifecycle, `ViewModelStoreScope` provides an effective solution.
 
+The scoped owner inherits the enclosing owner's default `ViewModelProvider.Factory`, which is what makes `hiltViewModel()` usable inside the scope: `HiltViewModelFactory` needs a real `SavedStateHandle` for every `@HiltViewModel`, whether or not it injects one. So the scope also runs its own `SavedStateRegistry` rather than borrowing the host's, which keeps sibling scopes from colliding and leaves the host's own saved state untouched.
+
+Three consequences worth knowing. A `SavedStateHandle` obtained inside the scope lives as long as the scope and does **not** survive process death, the same lifetime as the scoped `ViewModelStore` itself. Inside the scope `LocalViewModelStoreOwner` is the scoped owner while `LocalSavedStateRegistryOwner` and `LocalLifecycleOwner` are still the host's, so read the registry owner off the scoped owner rather than pairing those two composition locals.
+
+**Behavior change.** Under the default Compose host off Android, the default factory is `SavedStateViewModelFactory`, whose non-Android actual is an unimplemented stub, so a lookup with no explicit factory now throws inside the scope exactly as it already does outside it. Previously the scope fell through to the reflective default factory, so `viewModel<SomeNoArgViewModel>()` resolved on desktop where the host itself would have thrown. Pass a factory there, for example `viewModel { MyViewModel() }`. A host that supplies its own `HasDefaultViewModelProviderFactory` is unaffected.
+
 ## Find this repository useful? :heart:
 Support it by joining __[stargazers](https://github.com/skydoves/compose-effects/stargazers)__ for this repository. :star: <br>
 Also, __[follow me](https://github.com/skydoves)__ on GitHub for my next creations! 🤩
