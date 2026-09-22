@@ -15,6 +15,7 @@ nexusPlugin = "0.34.0"
 dokka = "2.0.0"
 kotlin = "2.4.0"
 kotlinBinaryCompatibility = "0.18.1"
+lintApi = "31.12.0"
 spotless = "7.2.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -54,6 +55,10 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+lint = { module = "com.android.tools.lint:lint", version.ref = "lintApi" }
+lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lintApi" }
+lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "lintApi" }
+lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lintApi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
