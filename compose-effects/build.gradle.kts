@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import com.skydoves.compose.effects.Configuration
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
   id(libs.plugins.android.library.get().pluginId)
@@ -50,6 +51,12 @@ kotlin {
     nodejs()
   }
 
+  @OptIn(ExperimentalWasmDsl::class)
+  wasmJs {
+    browser()
+    nodejs()
+  }
+
   @Suppress("OPT_IN_USAGE")
   applyHierarchyTemplate {
     common {
@@ -60,6 +67,7 @@ kotlin {
       group("skia") {
         withJvm()
         withJs()
+        withWasmJs()
         group("darwin") {
           group("apple") {
             group("ios") {
