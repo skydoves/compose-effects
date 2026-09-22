@@ -22,11 +22,15 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * Multiplatform behavioral tests for [RememberedEffect], executed on every Compose Multiplatform
- * target (Android, desktop/JVM, iOS, macOS, JS). They lock in the same semantics as
+ * Behavioral tests for [RememberedEffect]. They lock in the same semantics as
  * `LaunchedEffect`/`DisposableEffect` minus the coroutine: the effect runs once on entering the
  * composition, is skipped across recompositions while the keys are unchanged, and re-runs only
  * when a key changes.
+ *
+ * They live in `commonTest` so they compile for every target, but only desktop/JVM, the iOS
+ * simulator and macOS execute them today. The Android unit test variant has no Robolectric, so
+ * every case fails reading `Build.FINGERPRINT`, and the JS test task cannot be configured while
+ * `settings.gradle.kts` prefers settings repositories.
  */
 @OptIn(ExperimentalTestApi::class)
 class RememberedEffectTest {
