@@ -94,6 +94,38 @@ Button(onClick = { count++ }) {
 }
 ```
 
+### ChangedEffect
+
+`ChangedEffect` is a side-effect API that executes the provided lambda function only when the key actually changes. Unlike `RememberedEffect` and `LaunchedEffect`, it skips the initial composition, so it replaces the `var first by remember { mutableStateOf(true) }` guard that this behavior is usually hand-rolled with.
+
+The single value overload also hands you the previous and the current value:
+
+```kotlin
+var count by remember { mutableIntStateOf(0) }
+var enabled by remember { mutableStateOf(false) }
+
+// Nothing is logged for the initial composition, only for the changes after it.
+ChangedEffect(count) { previous, current ->
+    Log.d(tag, "$previous -> $current")
+}
+
+// A single key takes a lambda without parameters, like the other effect APIs.
+ChangedEffect(key1 = count) {
+    Log.d(tag, "$count")
+}
+
+// Multiple keys are supported as well, and take a lambda without parameters.
+ChangedEffect(count, enabled) {
+    Log.d(tag, "$count, $enabled")
+}
+
+Button(onClick = { count++ }) {
+    Text("Count: $count")
+}
+```
+
+The effect runs in the apply phase, after the composition is committed, never during composition. A composition that is composed and then discarded instead of applied neither runs the effect nor moves the previous value forward.
+
 ### Lint
 
 The `compose-effects` AAR ships an Android Lint check, so it activates on its own once you depend on the library. There is nothing to add to your build file.
