@@ -23,3 +23,4 @@ rootProject.name = "compose-effects"
 include(":app")
 include(":compose-effects")
 include(":compose-effects-viewmodel")
+include(":compose-effects-lint")

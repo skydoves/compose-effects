@@ -94,6 +94,32 @@ Button(onClick = { count++ }) {
 }
 ```
 
+### Lint
+
+The `compose-effects` AAR ships an Android Lint check, so it activates on its own once you depend on the library. There is nothing to add to your build file.
+
+| | |
+|---|---|
+| Artifact | `com.github.skydoves:compose-effects-lint` (published inside `compose-effects`) |
+| Issue id | `LaunchedEffectWithoutSuspend` |
+| Severity | Warning |
+
+It flags a `LaunchedEffect` whose block never suspends and never touches its `CoroutineScope` receiver, and offers to rename the call to `RememberedEffect`, keeping the keys.
+
+**Read the suggestion before taking it.** A `RememberedEffect` block runs synchronously from `RememberObserver.onRemembered()`, on the thread that applies the composition, and it is not cancelled when the keys change. That fits short, non-blocking work. A block that sleeps, blocks on I/O or loops forever belongs in `LaunchedEffect`, and the check cannot tell those apart from a cheap one. The quick fix is deliberately not an auto-fix for that reason, and it is withheld entirely for call shapes a rename would break (a fully qualified callee, a `block = ` named argument, or a file that already imports a different `RememberedEffect`).
+
+The check stays quiet whenever it cannot resolve something in the block, so it under-reports rather than guessing. One case is worth knowing about: AGP 8.12 bundles a Kotlin 2.2 frontend for lint, which cannot read the metadata of a Kotlin 2.4 standard library. Kotlin standard library declarations that are **top-level or extensions** therefore do not resolve, and any block calling one is skipped. That covers `println`, `listOf`, `require` and `buildString`, and also extension members such as `String.uppercase()` or `Iterable.map { }`. Declarations that are plain JVM members resolve normally, as do your own top-level functions, whether declared in the same file or another one.
+
+To turn it off:
+
+```kotlin
+android {
+    lint {
+        disable += "LaunchedEffectWithoutSuspend"
+    }
+}
+```
+
 ## Compose Effects ViewModel
 
 Compose Effects ViewModel provides side-effects/CompositionLocal APIs related to ViewModel.
