@@ -43,7 +43,7 @@ If you're using Version Catalog, you can configure the dependency by adding it t
 ```toml
 [versions]
 #...
-composeEffects = "0.2.0"
+composeEffects = "0.3.0"
 
 [libraries]
 #...
