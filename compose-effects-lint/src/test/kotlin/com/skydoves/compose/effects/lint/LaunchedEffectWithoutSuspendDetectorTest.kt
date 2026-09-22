@@ -702,9 +702,11 @@ class LaunchedEffectWithoutSuspendDetectorTest : LintDetectorTest() {
         """
         package com.example
 
+        import androidx.compose.runtime.Composable
+
         fun log() {}
 
-        @androidx.compose.runtime.Composable
+        @Composable
         fun Screen(k: Int) {
           androidx.compose.runtime.LaunchedEffect(k) {
             log()
@@ -713,7 +715,36 @@ class LaunchedEffectWithoutSuspendDetectorTest : LintDetectorTest() {
         """,
       ).indented(),
     ).expect(
-      warningAt(line = 7, source = "  androidx.compose.runtime.LaunchedEffect(k) {"),
+      warningAt(line = 9, source = "  androidx.compose.runtime.LaunchedEffect(k) {"),
+    ).expectFixDiffs("")
+  }
+
+  /**
+   * NEW-2: lint's fix performer refuses a replacement whose search text is absent from the
+   * source, so a fix offered against `LE(...)` is one the user can never apply.
+   */
+  @Test
+  fun `no quick fix when the callee is imported under an alias`() {
+    check(
+      kotlin(
+        """
+        package com.example
+
+        import androidx.compose.runtime.Composable
+        import androidx.compose.runtime.LaunchedEffect as LE
+
+        fun log() {}
+
+        @Composable
+        fun Screen(k: Int) {
+          LE(k) {
+            log()
+          }
+        }
+        """,
+      ).indented(),
+    ).expect(
+      warningAt(line = 10, source = "  LE(k) {", callee = "LE"),
     ).expectFixDiffs("")
   }
 
@@ -791,20 +822,19 @@ class LaunchedEffectWithoutSuspendDetectorTest : LintDetectorTest() {
     private const val MESSAGE = "LaunchedEffect block never suspends; consider " +
       "RememberedEffect, which runs the block without a coroutine"
 
-    private const val CALLEE_LENGTH = "LaunchedEffect".length
-
-    private fun warningAt(line: Int, source: String): String = buildString {
-      append("src/com/example/test.kt:")
-      append(line)
-      append(": Warning: ")
-      append(MESSAGE)
-      append(" [LaunchedEffectWithoutSuspend]\n")
-      append(source)
-      append("\n")
-      append(" ".repeat(source.indexOf("LaunchedEffect")))
-      append("~".repeat(CALLEE_LENGTH))
-      append("\n")
-      append("0 errors, 1 warnings")
-    }
+    private fun warningAt(line: Int, source: String, callee: String = "LaunchedEffect"): String =
+      buildString {
+        append("src/com/example/test.kt:")
+        append(line)
+        append(": Warning: ")
+        append(MESSAGE)
+        append(" [LaunchedEffectWithoutSuspend]\n")
+        append(source)
+        append("\n")
+        append(" ".repeat(source.indexOf(callee)))
+        append("~".repeat(callee.length))
+        append("\n")
+        append("0 errors, 1 warnings")
+      }
   }
 }

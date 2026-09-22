@@ -94,12 +94,15 @@ public class LaunchedEffectWithoutSuspendDetector :
    *   not exist;
    * - `RememberedEffect` names its lambda `effect`, so a `block = ` argument would silently
    *   bind to the deprecated zero-key overload;
-   * - a second import of the same simple name compiles and binds to the other declaration.
+   * - a second import of the same simple name compiles and binds to the other declaration;
+   * - an aliased import leaves no `LaunchedEffect` text at the call site, and lint's fix
+   *   performer refuses a replacement whose search text is not there.
    */
   private fun UCallExpression.renameFixOrNull(context: JavaContext): LintFix? {
     if (receiver != null) return null
 
     val call = sourcePsi as? KtCallExpression ?: return null
+    if (call.calleeExpression?.text != LAUNCHED_EFFECT_NAME) return null
     if (call.lambdaArguments.size != 1) return null
     if (call.valueArguments.any { it.getArgumentName() != null }) return null
 
