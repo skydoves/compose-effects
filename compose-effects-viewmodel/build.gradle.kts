@@ -88,6 +88,9 @@ kotlin {
       dependencies {
         implementation(compose.runtime)
         implementation(libs.lifecycle.viewmodel.compose)
+        implementation(libs.lifecycle.viewmodel.savedstate)
+        implementation(libs.lifecycle.runtime)
+        implementation(libs.savedstate)
       }
     }
     val commonTest by getting {
